@@ -1,5 +1,5 @@
-from av3.utils import Problem
-from av3.uninformed_search import *
+from aud.av3.utils import Problem
+from aud.av3.uninformed_search import *
 
 
 def check_obstacle(obstacle, max_y):

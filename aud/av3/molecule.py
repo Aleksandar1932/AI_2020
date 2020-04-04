@@ -1,5 +1,5 @@
-from av3.utils import Problem
-from av3.uninformed_search import *
+from aud.av3.utils import Problem
+from aud.av3.uninformed_search import *
 
 MAX_X, MIN_X, MAX_Y, MIN_Y = 8, 0, 6, 0
 
