@@ -2,6 +2,7 @@
   <dictionary name="aleksandar">
     <words>
       <w>importances</w>
+      <w>scaler</w>
     </words>
   </dictionary>
 </component>
