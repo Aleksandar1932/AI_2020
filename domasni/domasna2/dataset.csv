@@ -1,0 +1,11 @@
+Grad,DenNok,ItenPovik,Opasnost
+ne,nok,ne,Visoka
+ne,nok,da,Visoka
+ne,nok,da,Niska
+ne,den,ne,Niska
+ne,den,ne,Niska
+da,nok,ne,Visoka
+da,nok,ne,Visoka
+da,den,da,Niska
+da,den,da,Niska
+da,den,da,Visoka
