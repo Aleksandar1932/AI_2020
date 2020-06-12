@@ -30,7 +30,7 @@ def split_set(set):
 
 
 if __name__ == '__main__':
-    dataset = read_dataset()  # Read the dataset
+    dataset = read_dataset()  # Read the99 dataset
     train_set, val_set, test_set = divide_sets(dataset)  # Split the dataset into train, validation and test sets
 
     train_set_x, train_set_y = split_set(train_set)  # Split into X and Y
