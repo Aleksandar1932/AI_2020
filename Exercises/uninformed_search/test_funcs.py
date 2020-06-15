@@ -1,4 +1,4 @@
-from exercises.uninformed_search.snake import *
+from Exercises.uninformed_search.snake import *
 
 if __name__ == '__main__':
     print(move_left(

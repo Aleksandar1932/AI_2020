@@ -1,4 +1,4 @@
-from aud.av9.wine_quality_neural_network import read_dataset, divide_sets, split_set
+from Auditoriski.av9.wine_quality_neural_network import read_dataset, divide_sets, split_set
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.neural_network import MLPClassifier
 

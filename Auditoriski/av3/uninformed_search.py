@@ -1,6 +1,6 @@
 import sys
 
-from aud.av3.utils import Node, FIFOQueue, Stack, PriorityQueue
+from Auditoriski.av3.utils import Node, FIFOQueue, Stack, PriorityQueue
 
 """
 Неинформирано пребарување во рамки на дрво.

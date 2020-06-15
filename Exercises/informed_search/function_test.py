@@ -1,4 +1,4 @@
-from exercises.informed_search.graph_explorer import pointnum_to_coords, ecd
+from Exercises.informed_search.graph_explorer import pointnum_to_coords, ecd
 
 if __name__ == '__main__':
     print(pointnum_to_coords(10))

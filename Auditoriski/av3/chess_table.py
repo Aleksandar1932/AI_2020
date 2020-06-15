@@ -1,5 +1,5 @@
-from aud.av3.utils import Problem
-from aud.av3.uninformed_search import *
+from Auditoriski.av3.utils import Problem
+from Auditoriski.av3.uninformed_search import *
 
 
 def k1(x, y, b_x, b_y):  # up up left
