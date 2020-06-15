@@ -185,7 +185,7 @@ if __name__ == '__main__':
 	classifiers = []
 
 	for rate in learning_rates:
-		clf = MLPClassifier((3,), activation='relu', learning_rate_init=rate, max_iter=20)
+		clf = MLPClassifier((3,), activation='relu', learning_rate_init=rate, max_iter=20, random_state=0)
 		clf.fit(train_x, train_y)
 		classifiers.append(clf)
 
