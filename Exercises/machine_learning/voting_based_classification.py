@@ -142,13 +142,25 @@ def split_subset(s):
 
 
 def count_votes(all_votes):
-	counter = Counter(all_votes.values())
-	most_frequent = counter.most_common(1)[0][0]
-	return most_frequent
+	count_dict = {}
+	for i in range(0, 3):
+		count_dict[i] = 0
+
+	for vote in all_votes.values():
+		count_dict[vote] += 1
+
+	return count_dict
+
+
+def calc_dominate_vote(votes_count):
+	counter = Counter(votes_count.values())
+	if counter.most_common(1)[0][1] == 1:
+		return "unknown"
+	return counter.most_common(1)[0][0]
 
 
 def create_train_clf(t_x, t_y):
-	clf = DecisionTreeClassifier(criterion='entropy')
+	clf = DecisionTreeClassifier(criterion='entropy', random_state=0)
 	clf.fit(t_x, t_y)
 	return clf
 
@@ -178,5 +190,5 @@ if __name__ == '__main__':
 		votes[i] = c.predict([test_case[0:-1]])[0]
 
 	# Print the results
-	print("Glasovi {}".format(votes))
-	print("Predvidena klasa: {}".format(count_votes(all_votes=votes)))
+	print("Glasovi: {}".format(count_votes(votes)))
+	print("Predvidena klasa: {}".format(calc_dominate_vote(votes)))
