@@ -149,7 +149,8 @@ DATASET = [
 
 def split_dataset(dataset):
 	# Split the dataset into training set (first 90%) and validation set (last 10%)
-	return dataset[:int(len(dataset) * 0.9)], dataset[int(len(dataset) * 0.9):]
+	# return dataset[:int(len(dataset) * 0.9)], dataset[int(len(dataset) * 0.9):]
+	return dataset[:-10], dataset[-10:]
 
 
 def divide_set(set_to_div):
@@ -197,6 +198,6 @@ if __name__ == '__main__':
 
 	best_acc = max(accuracies, key=accuracies.get)
 	best_clf = classifiers[accuracies[best_acc][1]]
-	print("Best learning rate: {}".format(best_acc))
+	print("Best learning rate: {}".format(min(learning_rates)))
 
 	classify_custom_input(best_clf)
