@@ -186,7 +186,7 @@ if __name__ == '__main__':
 	classifiers = []
 
 	for rate in learning_rates:
-		clf = MLPClassifier((3,), activation='relu', learning_rate_init=rate, max_iter=20, random_state=0)
+		clf = MLPClassifier((3,), activation='relu', learning_rate_init=rate, max_iter=200, random_state=0)
 		clf.fit(train_x, train_y)
 		classifiers.append(clf)
 
@@ -196,8 +196,9 @@ if __name__ == '__main__':
 		classifiers[i].predict(test_x)
 		accuracies["{}".format(rate)] = (calculate_accuracy(classifiers[i].predict(test_x), test_y), i)
 
-	best_acc = max(accuracies, key=accuracies.get)
-	best_clf = classifiers[accuracies[best_acc][1]]
-	print("Best learning rate: {}".format(min(learning_rates)))
+	best_acc_lr_index = max(list(accuracies.values()), key=lambda x: x[0])[1]
+	best_clf = classifiers[best_acc_lr_index]
+	best_acc = learning_rates[best_acc_lr_index]
 
+	print("Best learning rate: {}".format(best_acc))
 	classify_custom_input(best_clf)
