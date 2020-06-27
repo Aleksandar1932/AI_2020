@@ -1,5 +1,7 @@
 import math
 from sys import maxsize as infinity
+import numpy as np
+from itertools import chain
 
 # from .utils import Node, PriorityQueue
 
@@ -501,59 +503,48 @@ def collect_star(player_pos, stars):
 	return tuple([star for star in stars if star != player_pos])
 
 
-class GraphExplorer(Problem):
+def inverse_bit(bit_to_inv):
+	if bit_to_inv == 0:
+		return 1
+	return 0
 
-	def __init__(self, initial, goal=None):
+
+def pick_point(position, state):
+	state_n = len(state[0])
+	# position: (row, col)
+	pos_up = (position[0], position[1] - 1)
+	pos_down = (position[0], position[1] + 1)
+	pos_left = (position[0] - 1, position[1])
+	pos_right = (position[0] + 1, position[1])
+
+	positions_proposed = [position, pos_up, pos_down, pos_left, pos_right]
+	positions = []
+	for (i, pos) in enumerate(positions_proposed):
+		if not (pos[0] < 0 or pos[0] >= state_n) and not (pos[1] < 0 or pos[1] >= state_n):
+			positions.append(pos)
+
+	state_list = [list(row) for row in state]
+
+	for pos in positions:
+		r = pos[0]
+		c = pos[1]
+
+		state_list[r][c] = inverse_bit(state_list[r][c])
+
+	return tuple((tuple(row) for row in state_list))
+
+
+class BlackWhite(Problem):
+	def __init__(self, initial, goal):
 		super().__init__(initial, goal)
 
 	def successor(self, state):
 		successors = {}
-		curr_pos = state[0]
-		curr_stars = state[1]
-		curr_links = state[2]
-
-		# desno
-		new_pos = curr_pos + 1 if link_exists(curr_pos, curr_pos + 1, curr_links) else curr_pos
-		if new_pos != curr_pos:
-			new_links = remove_link(curr_pos, new_pos, curr_links)
-			new_stars = collect_star(new_pos, curr_stars)
-			successors["Desno"] = (new_pos, new_stars, new_links)
-
-		# levo
-		new_pos = curr_pos - 1 if link_exists(curr_pos, curr_pos - 1, curr_links) else curr_pos
-		if new_pos != curr_pos:
-			new_links = remove_link(curr_pos, new_pos, curr_links)
-			new_stars = collect_star(new_pos, curr_stars)
-			successors["Levo"] = (new_pos, new_stars, new_links)
-
-		# gore
-		new_pos = curr_pos - 4 if link_exists(curr_pos, curr_pos - 4, curr_links) else curr_pos
-		if new_pos != curr_pos:
-			new_links = remove_link(curr_pos, new_pos, curr_links)
-			new_stars = collect_star(new_pos, curr_stars)
-			successors["Gore"] = (new_pos, new_stars, new_links)
-
-		# dolu
-		new_pos = curr_pos + 4 if link_exists(curr_pos, curr_pos + 4, curr_links) else curr_pos
-		if new_pos != curr_pos:
-			new_links = remove_link(curr_pos, new_pos, curr_links)
-			new_stars = collect_star(new_pos, curr_stars)
-			successors["Dolu"] = (new_pos, new_stars, new_links)
-
-		# dolu desno
-		new_pos = curr_pos + 5 if link_exists(curr_pos, curr_pos + 5, curr_links) else curr_pos
-		if new_pos != curr_pos:
-			new_links = remove_link(curr_pos, new_pos, curr_links)
-			new_stars = collect_star(new_pos, curr_stars)
-			successors["DoluDesno"] = (new_pos, new_stars, new_links)
-
-		# gore levo
-		new_pos = curr_pos - 5 if link_exists(curr_pos, curr_pos - 5, curr_links) else curr_pos
-		if new_pos != curr_pos:
-			new_links = remove_link(curr_pos, new_pos, curr_links)
-			new_stars = collect_star(new_pos, curr_stars)
-			successors["GoreLevo"] = (new_pos, new_stars, new_links)
-
+		for row_ind in range(0, len(state[0])):
+			for column_ind in range(0, len(state[0])):
+				new_state = pick_point((row_ind, column_ind), state)
+				if new_state != state:
+					successors["x: {}, y: {}".format(row_ind, column_ind)] = new_state
 		return successors
 
 	def actions(self, state):
@@ -563,48 +554,34 @@ class GraphExplorer(Problem):
 		return self.successor(state)[action]
 
 	def goal_test(self, state):
-		return len(state[1]) == 0
+		return state == self.goal
 
 	def h(self, node):
-		curr_stars = node.state[1]
-		man_coord = pointnum_to_coords(node.state[0])
-		if len(curr_stars) == 1:
-			return ecd(man_coord, pointnum_to_coords(curr_stars[0]))
-		elif len(curr_stars) == 2:
-			return min(
-				ecd(man_coord, pointnum_to_coords(curr_stars[1])) + ecd(pointnum_to_coords(curr_stars[1]),
-																		pointnum_to_coords(curr_stars[0])),
-				ecd(man_coord, pointnum_to_coords(curr_stars[0])) + ecd(pointnum_to_coords(curr_stars[0]),
-																		pointnum_to_coords(curr_stars[1]))
-			)
-		else:
-			return 0
+		num_ones = 0
+		flatten = list(chain(*node.state))
+		for el in flatten:
+			if el == 1:
+				num_ones += 1
+
+		return int(num_ones / 4)
 
 
-def pointnum_to_coords(p_num):
-	"""
-	:param p_num:
-	:return: (x, y) koordinati na tocka
-	"""
-	return int((p_num - 1) % 4), int((p_num - 1) / 4)
+def generate_state(fields_list, n):
+	return tuple(zip(*(iter(fields_list),) * n))
 
 
-def ecd(p1, p2):
-	return int(math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2))
+def generate_goal(n):
+	return generate_state([0] * n ** 2, n)
 
 
 if __name__ == '__main__':
-	links = (
-		(1, 2), (2, 6), (6, 5), (5, 1),
-		(3, 4), (4, 8), (8, 7), (7, 3),
-		(6, 7), (7, 11), (11, 10), (10, 6), (6, 11),
-		(9, 10), (10, 14), (14, 13), (13, 9),
-		(11, 12), (12, 16), (16, 15), (15, 11),
+	n = int(input())
+	fields = list(map(int, input().split(',')))
+
+	bw_problem = BlackWhite(
+		generate_state(fields, n),  # initial state generated from input `fields`
+		generate_goal(n)  # goal state
 	)
 
-	player_position = int(input())
-	star_one_position = int(input())
-	star_two_position = int(input())
-
-	result = astar_search(GraphExplorer((player_position, (star_one_position, star_two_position), links)))
-	print(result.solution())
+	solution = astar_search(bw_problem)
+	print(solution.solution())
