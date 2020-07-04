@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/aleksandar/PycharmProjects/aleksandar_test_project/venv"
+set -gx VIRTUAL_ENV "/media/aleksandar/DATA-HDD_ubuntu/PyCharmProjects/AI_2020/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

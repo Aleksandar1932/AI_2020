@@ -85,27 +85,36 @@ class Puzzle(Problem):
         return state == self.goal
 
     def h(self, node):
-        wrong_placed_fields = 0
+        total_mhd = 0
         flatten_state = sum(node.state, ())
         for field in flatten_state:
-            if field != -1 and flatten_state.index(field) != field - 1:
-                wrong_placed_fields += 1
+            actual = flatten_state.index(field)
+            correct = field - 1
+            total_mhd += mhd(ind_to_coord(actual), ind_to_coord(correct))
+        return total_mhd
 
-        return wrong_placed_fields
+
+def ind_to_coord(ind):
+    return (int(ind / 3), ind % 3)
+
+
+def mhd(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
 
 if __name__ == '__main__':
-    initial_state = ((BLANK_FIELD, 1, 3), (4, 2, 5), (7, 8, 6))
+    initial_state = ((8, 3, 5), (4, 1, 6), (2, 7, BLANK_FIELD))
     goal_state = ((1, 2, 3), (4, 5, 6), (7, 8, BLANK_FIELD))
 
     puzzle = Puzzle(initial_state, goal_state)
 
-    print("== Uninformed search ==")
-
-    result_uninformed = breadth_first_graph_search(puzzle)
-    print(result_uninformed.solution())
+    # print("== Uninformed search ==")
+    #
+    # result_uninformed = depth_first_graph_search(puzzle)
+    # print(result_uninformed.solution())
 
     print("== Informed search ==")
 
     result_informed = astar_search(puzzle)
     print(result_informed.solution())
+u kodo 

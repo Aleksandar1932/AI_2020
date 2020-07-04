@@ -673,7 +673,7 @@ class Snake(Problem):
         return 0
 
 def mhd(p1, p2):
-    return abs(p1[0] - p2[0]) - abs(p1[1] - p2[1])
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
 
 if __name__ == '__main__':

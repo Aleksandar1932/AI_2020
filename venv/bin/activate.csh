@@ -8,7 +8,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/home/aleksandar/PycharmProjects/aleksandar_test_project/venv"
+setenv VIRTUAL_ENV "/media/aleksandar/DATA-HDD_ubuntu/PyCharmProjects/AI_2020/venv"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"
