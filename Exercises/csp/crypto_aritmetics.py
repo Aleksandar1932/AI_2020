@@ -1,9 +1,8 @@
 from constraint import *
-from constraint import MinConflictsSolver
 
 
 def get_letters(ws):
-    """Funkcija koja kako vlez prima zborovi, a vraka set od bukvite koi se srekavaat vo zborovite"""
+    """Get all the unique letters from the words and the solution (variables in the CSP)"""
     words_set = set()
 
     for word in ws:
@@ -13,31 +12,26 @@ def get_letters(ws):
     return list(words_set)
 
 
+def get_assigned_map(vars):
+    """Get current assignments to letters as map for further checks"""
+    return dict(zip(get_letters(WORDS + SOLUTION_WORD), vars))
+
+
 def letters_constraint(*args):
-    nums = args
-    letters = get_letters(words + word_solution)
+    """Letters arithmetic validity checker"""
+    letters_nums = get_assigned_map(args)
 
-    letters_nums = dict(zip(letters, nums))
-
-    word_solution_num = word_to_num(word_solution, letters_nums)
+    word_solution_num = word_to_num(SOLUTION_WORD, letters_nums)
     words_nums = []
 
-    for w in words:
+    for w in WORDS:
         words_nums.append(word_to_num([w], letters_nums))
 
-    retval = False
-
-    if sum(words_nums) == word_solution_num:
-        retval = True
-
-    for w in words + word_solution:
-        if letters_nums[w[0]] == 0:
-            retval = False
-
-    return retval
+    return sum(words_nums) == word_solution_num
 
 
 def word_to_num(word, letters_dict):
+    """Word converted to number according to current assignments to variables"""
     ret_num = 0
 
     for (i, letter) in enumerate(word[0]):
@@ -46,22 +40,33 @@ def word_to_num(word, letters_dict):
     return ret_num
 
 
-def get_leftmost_digit(number_string):
-    return int(number_string[0])
+def leading_zeros(*args):
+    """No leading zeros checker"""
+    letters_nums = get_assigned_map(args)
+
+    for w in WORDS + SOLUTION_WORD:
+        if letters_nums[w[0]] == 0:
+            return False
+    return True
 
 
 if __name__ == '__main__':
-    words = ["SEND", "MORE"]
-    word_solution = ["MONEY"]
+    # Init variables, could be read from `input()`
+    WORDS = ["SEND", "MORE"]
+    SOLUTION_WORD = ["MONEY"]
 
     # Init problem
     problem = Problem(BacktrackingSolver())
 
     # Init variables and domain and add them to the problem
-    variables = get_letters(words + word_solution)
+    variables = get_letters(WORDS + SOLUTION_WORD)
     domain = range(0, 10)
     problem.addVariables(variables, domain)
 
+    # Add constraints
     problem.addConstraint(letters_constraint, variables)
+    problem.addConstraint(leading_zeros, variables)
+    problem.addConstraint(AllDifferentConstraint(), variables)
 
+    # Print solution
     print(problem.getSolution())
