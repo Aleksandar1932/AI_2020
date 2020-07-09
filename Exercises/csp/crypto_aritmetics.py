@@ -52,8 +52,8 @@ def leading_zeros(*args):
 
 if __name__ == '__main__':
     # Init variables, could be read from `input()`
-    WORDS = ["SEND", "MORE"]
-    SOLUTION_WORD = ["MONEY"]
+    WORDS = ["TAKE", "A", "CAKE"]
+    SOLUTION_WORD = ["KATE"]
 
     # Init problem
     problem = Problem(BacktrackingSolver())
